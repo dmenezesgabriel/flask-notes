@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="p-3">
+  {% block header %}
+    <h1>{% block title %}Edit "{{ note['title'] }}"{% endblock %}</h1>
+  {% endblock %}
+  <hr>
+  <form method="post">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input class="form-control form-control-lg" name="title" id="title"
+        value="{{ request.form['title'] or note['title'] }}" required>
+    </div>
+    <div class="form-group">
+      <label for="body">Body</label>
+      <textarea class="form-control form-control-lg" name="body" id="body">{{ request.form['body'] or note['body'] }}</textarea>
+    </div>
+  </form>
+  <input class="btn btn-success btn-md" type="submit" value="Save">
+  <hr>
+  <form action="{{ url_for('notes.delete', id=note['id']) }}" method="note">
+    <input class="btn btn-danger btn-md" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+</div>
+{% endblock %}

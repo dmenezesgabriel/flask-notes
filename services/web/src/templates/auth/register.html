@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="p-3">
+  {% block header %}
+    <h1>{% block title %}Register{% endblock %}</h1>
+  {% endblock %}
+  <hr>
+  <form method="post">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input class="form-control form-control-lg" name="username" id="username" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input class="form-control form-control-lg" type="password" name="password" id="password" required>
+    </div>
+    <input class="btn btn-success btn-md" type="submit" value="Register">
+  </form>
+</div>
+{% endblock %}
