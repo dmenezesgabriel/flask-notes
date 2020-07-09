@@ -1,16 +1,13 @@
-import functools
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, url_for
 )
 # from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.exc import DataError
 from src.models.models import db, User
-from flask_bcrypt import Bcrypt, generate_password_hash, check_password_hash
 from src.views.auth import login_required
 from src.forms.forms import EditProfileForm
 
 
-bcrypt = Bcrypt()
 bp = Blueprint('user', __name__)
 
 

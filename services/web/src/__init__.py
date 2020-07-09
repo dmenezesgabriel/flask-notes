@@ -1,9 +1,13 @@
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from src.views import auth, notes, user
 from src.models.models import db, migrate
 from flask_ckeditor import CKEditor
 from src.views.auth import bcrypt
+
+
+def page_not_found(error):
+    return render_template('error/404.html'), 404
 
 
 def create_app(test_config=None):
@@ -50,6 +54,7 @@ def create_app(test_config=None):
     app.config['CKEDITOR_HEIGHT'] = 400
     # Bcrypt
     bcrypt.init_app(app)
+
     # a simple page that says hello
     @app.route('/hello')
     def hello():
@@ -59,5 +64,6 @@ def create_app(test_config=None):
     app.register_blueprint(user.bp)
     app.register_blueprint(notes.bp)
     app.add_url_rule('/', endpoint='index')
+    app.register_error_handler(404, page_not_found)
 
     return app

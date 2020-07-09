@@ -14,7 +14,7 @@ class TimestampMixin(object):
 
 
 class User(TimestampMixin, db.Model):
-    __tablename__ = "users"
+    __tablename__ = "Users"
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -26,6 +26,6 @@ class Note(TimestampMixin, db.Model):
     __tablename__ = "Notes"
 
     id = db.Column(db.Integer, primary_key=True)
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('Users.id'))
     title = db.Column(db.String(80), nullable=False)
     body = db.Column(db.String(5000), nullable=False)
