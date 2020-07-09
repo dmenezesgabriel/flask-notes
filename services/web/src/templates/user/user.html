@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+	<div class="p-3">
+		{% block header %}
+			<h1>Profile</h1>
+		{% endblock %}
+	<hr>
+		<div class="card">
+      <div class="card-header">
+        <div class="d-flex">
+          <h2 class="mr-sm-3">{{ user.username }}</h2>
+          <div class="p-1">
+            <a class="btn btn-secondary btn-sm" href="{{ url_for('user.update', username=g.user.username) }}" role="button">Edit</a>
+        	</div>
+        </div>
+      </div>
+			<div class="card-body">
+				<p>Username: {{  user.username }}</p>
+				<p>Email: {{  user.email }}</p>
+			</div>
+
+		</div>
+
+	</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Edit user{% endblock %}
+
+{% block content %}
+  <div class="p-3">
+    {% block header %}
+    <h1>Edit "{{ user['username'] }}"</h1>
+    {% endblock %}
+    <hr>
+    <form method="post" action="">
+      {{ form.csrf_token }}
+      {{ form.hidden_tag() }}
+      <div class="form-group">
+        {% if form.username.errors %}
+          {{ form.username.label() }}
+          {{ form.username(class="form-control form-control-lg is-invalid") }}
+          {% for error in form.username.errors %}
+          <div class="invalid-feedback">
+            {{ error }}
+          </div>
+          {% endfor %}
+        {% else%}
+          {{ form.username.label() }}
+          {{ form.username(class="form-control form-control-lg")}}
+        {% endif%}
+      </div>
+      <div class="form-group">
+        {% if form.email.errors %}
+          {{ form.email.label() }}
+          {{ form.email(class="form-control form-control-lg is-invalid") }}
+          {% for error in form.email.errors %}
+          <div class="invalid-feedback">
+            {{ error }}
+          </div>
+          {% endfor %}
+        {% else%}
+          {{ form.email.label() }}
+          {{ form.email(class="form-control form-control-lg", rows="10", cols="50")}}
+        {% endif%}
+      </div>
+        {{ form.submit(class="btn btn-success btn-md")}}
+    </form>
+  </div>
+{% endblock %}
