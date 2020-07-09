@@ -2,12 +2,14 @@ import functools
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
-from werkzeug.security import check_password_hash, generate_password_hash
+# from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.exc import DataError
 from src.models.models import db, User
 from src.forms.forms import Register, Login
+from flask_bcrypt import Bcrypt, generate_password_hash, check_password_hash
 
 
+bcrypt = Bcrypt()
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
@@ -17,6 +19,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        password_hash = generate_password_hash(password).decode('utf-8')
         email = request.form['email']
         error = None
 
@@ -34,7 +37,7 @@ def register():
             try:
                 new_user = User(
                     username=username,
-                    password=generate_password_hash(password),
+                    password=password_hash,
                     email=email
                 )
                 db.session.add(new_user)

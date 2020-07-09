@@ -3,6 +3,7 @@ from flask import Flask, jsonify
 from src.views import auth, notes
 from src.models.models import db
 from flask_ckeditor import CKEditor
+from src.views.auth import bcrypt
 
 
 def create_app(test_config=None):
@@ -45,6 +46,8 @@ def create_app(test_config=None):
     # WSGIWYG editor
     ckeditor = CKEditor(app)
     app.config['CKEDITOR_HEIGHT'] = 400
+    # Bcrypt
+    bcrypt.init_app(app)
     # a simple page that says hello
     @app.route('/hello')
     def hello():
