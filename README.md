@@ -18,5 +18,9 @@ The main tools I choosed to make it happen were:
 - Docker
 - Docker-compose
 
+## Other
+
+- chmod +x services/web/entrypoint.sh
+
 ## Reference
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)

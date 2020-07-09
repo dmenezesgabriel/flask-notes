@@ -16,21 +16,21 @@ bp = Blueprint('notes', __name__)
 def index():
     page = request.args.get('page', 1, type=int)
     notes = (
-             Note.query
-             .with_entities(
-                 Note.id,
-                 Note.created_at,
-                 Note.updated_at,
-                 Note.title,
-                 Note.body,
-                 Note.author_id,
-                 User.id.label('user_id'),
-                 User.username
-             )
-             .filter_by(author_id=g.user.id)
-             .order_by(Note.created_at.desc())
-             .join(User, User.id == Note.author_id)
-             .paginate(page, 5, False)
+        Note.query
+        .with_entities(
+            Note.id,
+            Note.created_at,
+            Note.updated_at,
+            Note.title,
+            Note.body,
+            Note.author_id,
+            User.id.label('user_id'),
+            User.username
+        )
+        .filter_by(author_id=g.user.id)
+        .order_by(Note.created_at.desc())
+        .join(User, User.id == Note.author_id)
+        .paginate(page, 5, False)
 
     )
     # Pagination
@@ -77,10 +77,10 @@ def create():
 
 def get_note(id, check_author=True):
     note = (
-             Note.query
-             .filter_by(id=id)
-             .join(User, Note.author_id == User.id)
-             .first()
+        Note.query
+        .filter_by(id=id)
+        .join(User, Note.author_id == User.id)
+        .first()
     )
 
     if note is None:

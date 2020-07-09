@@ -12,3 +12,15 @@ migrate:
 
 psql:
 	docker-compose exec db psql --username=postgres --dbname=postgres
+
+down-dev:
+	docker-compose down
+
+build-prod:
+	docker-compose -f docker-compose.prod.yml build --no-cache
+
+run-prod:
+	docker-compose -f docker-compose.prod.yml up -d
+
+down-prod:
+	docker-compose -f docker-compose.prod.yml down
