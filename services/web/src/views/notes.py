@@ -14,6 +14,7 @@ bp = Blueprint('notes', __name__)
 @bp.route('/')
 @login_required
 def index():
+    page = request.args.get('page', 1, type=int)
     notes = (
              Note.query
              .with_entities(
@@ -28,10 +29,22 @@ def index():
              )
              .filter_by(author_id=g.user.id)
              .order_by(Note.created_at.desc())
-             .join(User, User.id == Note.author_id).all()
+             .join(User, User.id == Note.author_id)
+             .paginate(page, 5, False)
 
     )
-    return render_template('notes/index.html', notes=notes)
+    # Pagination
+    next_url = (
+        url_for('notes.index', page=notes.next_num)
+        if notes.has_next else None
+    )
+    prev_url = (
+        url_for('notes.index', page=notes.prev_num)
+        if notes.has_prev else None
+    )
+
+    return render_template('notes/index.html', notes=notes.items,
+                           next_url=next_url, prev_url=prev_url)
 
 
 @bp.route('/create', methods=('GET', 'POST'))

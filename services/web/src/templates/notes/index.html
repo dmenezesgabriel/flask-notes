@@ -31,4 +31,12 @@
       <hr>
     {% endif %}
   {% endfor %}
+  <div class="mt-3">
+    {% if prev_url %}
+    <a class="btn btn-secondary mr-sm-2" href="{{ prev_url }}">Newer notes</a>
+    {% endif %}
+    {% if next_url %}
+    <a class="btn btn-secondary" href="{{ next_url }}">Older notes</a>
+    {% endif %}
+  </div>
 {% endblock %}
