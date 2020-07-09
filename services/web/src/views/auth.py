@@ -5,7 +5,7 @@ from flask import (
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.exc import DataError
 from src.models.models import db, User
-from src.forms.forms import Register
+from src.forms.forms import Register, Login
 
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -17,6 +17,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        email = request.form['email']
         error = None
 
         user = User.query.filter_by(username=username).first()
@@ -25,35 +26,45 @@ def register():
             error = 'User {} is already registered.'.format(username)
 
         if not form.validate_on_submit():
-            flash('Register Failed')
+            error = 'Invalid form params'
+            flash(error, 'danger')
             return render_template('auth/register.html', form=form)
 
         if error is None:
             try:
                 new_user = User(
                     username=username,
-                    password=generate_password_hash(password)
+                    password=generate_password_hash(password),
+                    email=email
                 )
                 db.session.add(new_user)
                 db.session.commit()
                 return redirect(url_for('auth.login'))
+                message = 'registered with success'
+                flash(message, 'success')
             except DataError:
                 db.session.rollback()
                 error = 'Number of characters exceeds maximum'
-                flash(error)
+                flash(error, 'danger')
 
-        flash(error)
+        flash(error, 'danger')
 
     return render_template('auth/register.html', form=form)
 
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
+    form = Login()
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         error = None
         user = User.query.filter_by(username=username).first()
+
+        if not form.validate_on_submit():
+            error = 'Invalid form params'
+            flash(error, 'danger')
+            return render_template('auth/login.html', form=form)
 
         if user is None:
             error = 'Incorrect username.'
@@ -65,9 +76,9 @@ def login():
             session['user_id'] = user.id
             return redirect(url_for('index'))
 
-        flash(error)
+        flash(error, 'danger')
 
-    return render_template('auth/login.html')
+    return render_template('auth/login.html', form=form)
 
 
 @bp.before_app_request

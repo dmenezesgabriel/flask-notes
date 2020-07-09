@@ -4,19 +4,41 @@
 {% block content %}
 <div class="p-3">
   {% block header %}
-    <h1>Log In</h1>
+    <h1>Login</h1>
   {% endblock %}
   <hr>
-  <form method="post">
+  <form method="post" action="">
+    {{ form.csrf_token }}
+    {{ form.hidden_tag() }}
     <div class="form-group">
-      <label for="username">Username</label>
-      <input class="form-control form-control-lg" name="username" id="username" required>
+      {% if form.username.errors %}
+        {{ form.username.label() }}
+        {{ form.username(class="form-control form-control-lg is-invalid") }}
+        {% for error in form.username.errors %}
+        <div class="invalid-feedback">
+          {{ error }}
+        </div>
+        {% endfor %}
+      {% else%}
+        {{ form.username.label() }}
+        {{ form.username(class="form-control form-control-lg")}}
+      {% endif%}
     </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input class="form-control form-control-lg" type="password" name="password" id="password" required>
-      </div>
-      <input class="btn btn-success btn-md" type="submit" value="Log In">
-    </form>
+    <div class="form-group">
+      {% if form.password.errors %}
+        {{ form.password.label() }}
+        {{ form.password(class="form-control form-control-lg is-invalid") }}
+        {% for error in form.password.errors %}
+        <div class="invalid-feedback">
+          {{ error }}
+        </div>
+        {% endfor %}
+      {% else%}
+        {{ form.password.label() }}
+        {{ form.password(class="form-control form-control-lg")}}
+      {% endif%}
+    </div>
+      {{ form.submit(class="btn btn-success btn-md")}}
+  </form>
 </div>
 {% endblock %}

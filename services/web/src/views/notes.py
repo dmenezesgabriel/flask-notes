@@ -5,6 +5,7 @@ from werkzeug.exceptions import abort
 from sqlalchemy.exc import DataError
 from src.views.auth import login_required
 from src.models.models import db, User, Note
+from src.forms import forms
 
 
 bp = Blueprint('notes', __name__)
@@ -36,16 +37,17 @@ def index():
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
+    form = forms.Note()
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
         error = None
 
-        if not title:
-            error = 'Title is required.'
+        if not form.validate_on_submit():
+            error = 'Invalid form params'
+            flash(error, 'danger')
+            return render_template('notes/create.html', form=form)
 
-        if error is not None:
-            flash(error)
         else:
             try:
                 new_note = Note(title=title, body=body, author_id=g.user.id)
@@ -55,9 +57,9 @@ def create():
             except DataError:
                 db.session.rollback()
                 error = 'Number of characters exceeds maximum'
-                flash(error)
+                flash(error, 'danger')
 
-    return render_template('notes/create.html')
+    return render_template('notes/create.html', form=form)
 
 
 def get_note(id, check_author=True):
@@ -81,29 +83,30 @@ def get_note(id, check_author=True):
 @login_required
 def update(id):
     note = get_note(id)
+    form = forms.Note(obj=note)
 
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
         error = None
 
-        if not title:
-            error = 'Title is required.'
+        note.title = title
+        note.body = body
+        try:
+            if not form.validate_on_submit():
+                error = 'Invalid form params'
+                flash(error, 'danger')
+                return render_template(
+                    'notes/update.html', note=note, form=form)
 
-        if error is not None:
-            flash(error)
-        else:
-            try:
-                note.title = title
-                note.body = body
-                db.session.commit()
-                return redirect(url_for('notes.index'))
-            except DataError:
-                db.session.rollback()
-                error = 'Number of characters exceeds maximum'
-                flash(error)
+            db.session.commit()
+            return redirect(url_for('notes.index'))
+        except DataError:
+            db.session.rollback()
+            error = 'Number of characters exceeds maximum'
+            flash(error, 'danger')
 
-    return render_template('notes/update.html', note=note)
+    return render_template('notes/update.html', note=note, form=form)
 
 
 @bp.route('/<int:id>/delete', methods=('POST', 'GET'))
