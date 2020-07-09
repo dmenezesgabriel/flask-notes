@@ -2,6 +2,7 @@ import os
 from flask import Flask, jsonify
 from src.views import auth, notes
 from src.models.models import db
+from flask_ckeditor import CKEditor
 
 
 def create_app(test_config=None):
@@ -41,6 +42,9 @@ def create_app(test_config=None):
 
     # Init app
     db.init_app(app)
+    # WSGIWYG editor
+    ckeditor = CKEditor(app)
+    app.config['CKEDITOR_HEIGHT'] = 400
     # a simple page that says hello
     @app.route('/hello')
     def hello():
