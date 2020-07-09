@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% block title %}Notes{% endblock %}
 
 {% block content %}
   <div class="p-3">
@@ -11,7 +11,7 @@
     <div class="card">
       <div class="card-header">
         <div class="d-flex">
-          <h2>{{ note.title }}</h2>
+          <h2 class="mr-sm-3">{{ note.title }}</h2>
           <div class="p-1">
             {% if g.user.id == note.author_id %}
             <form action="{{ url_for('notes.delete', id=note['id']) }}" method="note">
@@ -24,7 +24,7 @@
           <div class="about">{{ note.created_at.strftime('%Y-%m-%d') }}</div>
       </div>
       <div class="card-body">
-        <p class="body">{{ note.body }}</p>
+        <div class="note-content">{{ note.body }}</div>
       </div>
     </div>
     {% if not loop.last %}

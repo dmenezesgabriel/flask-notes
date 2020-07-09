@@ -3,36 +3,48 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 from werkzeug.security import check_password_hash, generate_password_hash
+from sqlalchemy.exc import DataError
 from src.models.models import db, User
+from src.forms.forms import Register
+
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
+    form = Register()
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         error = None
 
         user = User.query.filter_by(username=username).first()
-        if not username:
-            error = 'Username is required.'
-        elif not password:
-            error = 'Password is required.'
-        elif user is not None:
+
+        if user is not None:
             error = 'User {} is already registered.'.format(username)
 
+        if not form.validate_on_submit():
+            flash('Register Failed')
+            return render_template('auth/register.html', form=form)
+
         if error is None:
-            new_user = User(
-                username=username, password=generate_password_hash(password))
-            db.session.add(new_user)
-            db.session.commit()
-            return redirect(url_for('auth.login'))
+            try:
+                new_user = User(
+                    username=username,
+                    password=generate_password_hash(password)
+                )
+                db.session.add(new_user)
+                db.session.commit()
+                return redirect(url_for('auth.login'))
+            except DataError:
+                db.session.rollback()
+                error = 'Number of characters exceeds maximum'
+                flash(error)
 
         flash(error)
 
-    return render_template('auth/register.html')
+    return render_template('auth/register.html', form=form)
 
 
 @bp.route('/login', methods=('GET', 'POST'))

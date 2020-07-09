@@ -24,11 +24,20 @@
     </ul>
   </nav>
   <div class="container">
-    <section class="content">
+    <section class="content mb-3">
       {% for message in get_flashed_messages() %}
-        <div class="flash">{{ message }}</div>
+        <div class="mt-3 alert alert-danger">{{ message }}</div>
       {% endfor %}
       {% block content %}{% endblock %}
     </section>
   </div>
+  <footer class="footer container-fluid p-3 bg-light text-center" id="footer">
+    <div>
+      <div class="container">
+        <span class="text-muted">
+          Made with Flask
+        </span>
+      </div>
+    </div>
+  </footer>
 </body>

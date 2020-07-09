@@ -2,6 +2,7 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
 from werkzeug.exceptions import abort
+from sqlalchemy.exc import DataError
 from src.views.auth import login_required
 from src.models.models import db, User, Note
 
@@ -13,7 +14,8 @@ bp = Blueprint('notes', __name__)
 @login_required
 def index():
     notes = (
-             Note.query.with_entities(
+             Note.query
+             .with_entities(
                  Note.id,
                  Note.created_at,
                  Note.updated_at,
@@ -23,7 +25,8 @@ def index():
                  User.id.label('user_id'),
                  User.username
              )
-             .order_by(Note.updated_at.desc())
+             .filter_by(author_id=g.user.id)
+             .order_by(Note.created_at.desc())
              .join(User, User.id == Note.author_id).all()
 
     )
@@ -44,10 +47,15 @@ def create():
         if error is not None:
             flash(error)
         else:
-            new_note = Note(title=title, body=body, author_id=g.user.id)
-            db.session.add(new_note)
-            db.session.commit()
-            return redirect(url_for('notes.index'))
+            try:
+                new_note = Note(title=title, body=body, author_id=g.user.id)
+                db.session.add(new_note)
+                db.session.commit()
+                return redirect(url_for('notes.index'))
+            except DataError:
+                db.session.rollback()
+                error = 'Number of characters exceeds maximum'
+                flash(error)
 
     return render_template('notes/create.html')
 
@@ -85,10 +93,15 @@ def update(id):
         if error is not None:
             flash(error)
         else:
-            note.title = title
-            note.body = body
-            db.session.commit()
-            return redirect(url_for('notes.index'))
+            try:
+                note.title = title
+                note.body = body
+                db.session.commit()
+                return redirect(url_for('notes.index'))
+            except DataError:
+                db.session.rollback()
+                error = 'Number of characters exceeds maximum'
+                flash(error)
 
     return render_template('notes/update.html', note=note)
 
