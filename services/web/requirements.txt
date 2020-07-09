@@ -4,3 +4,4 @@ Flask-Migrate==2.5.2
 psycopg2-binary==2.8.4
 flask-wtf
 flask-ckeditor
+flask-bcrypt
