@@ -7,16 +7,38 @@
     <h1>New Note</h1>
   {% endblock %}
   <hr>
-  <form method="post">
+  <form method="post" action="">
+    {{ form.csrf_token }}
+    {{ form.hidden_tag() }}
     <div class="form-group">
-      <label for="title">Title</label>
-      <input class="form-control form-control-lg" name="title" id="title" value="{{ request.form['title'] }}" required>
+      {% if form.title.errors %}
+        {{ form.title.label() }}
+        {{ form.title(class="form-control form-control-lg is-invalid") }}
+        {% for error in form.title.errors %}
+        <div class="invalid-feedback">
+          {{ error }}
+        </div>
+        {% endfor %}
+      {% else%}
+        {{ form.title.label() }}
+        {{ form.title(class="form-control form-control-lg")}}
+      {% endif%}
     </div>
     <div class="form-group">
-      <label for="body">Body</label>
-      <textarea class="form-control form-control-lg" name="body" rows="10" cols="50" id="body">{{ request.form['body'] }}</textarea>
+      {% if form.body.errors %}
+        {{ form.body.label() }}
+        {{ form.body(class="form-control form-control-lg is-invalid") }}
+        {% for error in form.body.errors %}
+        <div class="invalid-feedback">
+          {{ error }}
+        </div>
+        {% endfor %}
+      {% else%}
+        {{ form.body.label() }}
+        {{ form.body(class="form-control form-control-lg", rows="10", cols="50")}}
+      {% endif%}
     </div>
-    <input class="btn btn-success btn-md" type="submit" value="Save">
+      {{ form.submit(class="btn btn-success btn-md")}}
   </form>
 </div>
 {% endblock %}
