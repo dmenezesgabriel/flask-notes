@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, length, EqualTo
 from wtforms.widgets import TextArea
+from flask_ckeditor import CKEditorField
 
 
 class Register(FlaskForm):
@@ -28,6 +29,6 @@ class Login(FlaskForm):
 class Note(FlaskForm):
     title = StringField(
         'Title', validators=[DataRequired(), length(min=1, max=80)])
-    body = StringField('Body', widget=TextArea(), validators=[DataRequired(),
-                       length(min=1, max=5000)])
+    body = CKEditorField('Body', widget=TextArea(), validators=[DataRequired(),
+                         length(min=1, max=5000)])
     submit = SubmitField('Submit')

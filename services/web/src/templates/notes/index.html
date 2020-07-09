@@ -24,7 +24,7 @@
           <div class="about">{{ note.created_at.strftime('%Y-%m-%d') }}</div>
       </div>
       <div class="card-body">
-        <div class="note-content">{{ note.body }}</div>
+        <div class="note-content">{{ note.body | safe }}</div>
       </div>
     </div>
     {% if not loop.last %}
