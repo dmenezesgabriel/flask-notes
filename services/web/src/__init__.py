@@ -1,7 +1,7 @@
 import os
 from flask import Flask, jsonify
-from src.views import auth, notes
-from src.models.models import db
+from src.views import auth, notes, user
+from src.models.models import db, migrate
 from flask_ckeditor import CKEditor
 from src.views.auth import bcrypt
 
@@ -44,6 +44,7 @@ def create_app(test_config=None):
 
     # Init app
     db.init_app(app)
+    migrate.init_app(app, db)
     # WSGIWYG editor
     ckeditor = CKEditor(app)
     app.config['CKEDITOR_HEIGHT'] = 400
@@ -55,6 +56,7 @@ def create_app(test_config=None):
         return jsonify(hello="world")
 
     app.register_blueprint(auth.bp)
+    app.register_blueprint(user.bp)
     app.register_blueprint(notes.bp)
     app.add_url_rule('/', endpoint='index')
 

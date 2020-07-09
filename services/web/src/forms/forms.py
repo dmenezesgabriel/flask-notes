@@ -32,3 +32,12 @@ class Note(FlaskForm):
     body = CKEditorField('Body', widget=TextArea(), validators=[DataRequired(),
                          length(min=1, max=5000)])
     submit = SubmitField('Submit')
+
+
+class EditProfileForm(FlaskForm):
+    username = StringField(
+        'Username', validators=[DataRequired(), length(min=3, max=20)])
+    email = StringField(
+        'Email', validators=[DataRequired()]
+    )
+    submit = SubmitField('Submit')

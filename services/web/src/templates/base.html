@@ -15,7 +15,7 @@
     <a class="navbar-brand" href="/">Flask Notes</a>
     <ul class="nav">
       {% if g.user %}
-        <li class="nav-item"><span class="nav-link text-white">{{ g.user.username }}</span></li>
+        <li class="nav-item"><a class="nav-link nav-item dropdown text-white mr-sm-3" href="{{ url_for('user.user', username=g.user.username) }}" role="button">{{ g.user.username }}</a></li>
         <li class="nav-item"><a class="nav-link btn btn-secondary" href="{{ url_for('auth.logout') }}" role="button">Log Out</a></li>
       {% else %}
         <li class="nav-item mr-sm-2"><a class="nav-link btn btn-secondary" href="{{ url_for('auth.register') }}" role="button">Register</a></li>
