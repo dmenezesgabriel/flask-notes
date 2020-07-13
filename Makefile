@@ -7,6 +7,9 @@ run-dev:
 create-db:
 	docker-compose exec web python manage.py create_db
 
+seed-db:
+	docker-compose exec web python manage.py seed_db
+
 migrate:
 	docker-compose exec web python manage.py db init
 
@@ -24,4 +27,3 @@ run-prod:
 
 create-db-prod:
 	docker-compose -f docker-compose.prod.yml exec web python manage.py create_db
-	docker-compose -f docker-compose.prod.yml down

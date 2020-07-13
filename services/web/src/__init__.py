@@ -4,6 +4,7 @@ from src.views import auth, notes, user
 from src.models.models import db, migrate
 from flask_ckeditor import CKEditor
 from src.views.auth import bcrypt
+from src.routes import setup_routes
 
 
 def page_not_found(error):
@@ -49,6 +50,7 @@ def create_app(test_config=None):
     # Init app
     db.init_app(app)
     migrate.init_app(app, db)
+    setup_routes(app)
     # WSGIWYG editor
     ckeditor = CKEditor(app)
     app.config['CKEDITOR_HEIGHT'] = 400
