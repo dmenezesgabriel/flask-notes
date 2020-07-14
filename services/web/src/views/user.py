@@ -1,10 +1,10 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, redirect, render_template, request, url_for
 )
 # from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.exc import DataError
 from src.models.models import db, User
-from src.views.auth import login_required
+from flask_login import login_required, current_user
 from src.forms.forms import EditProfileForm
 
 
@@ -40,7 +40,8 @@ def update(username):
                     'user/update.html', user=user, form=form)
 
             db.session.commit()
-            return redirect(url_for('user.user', username=g.user.username))
+            return redirect(
+                url_for('user.user', username=current_user.username))
         except DataError:
             db.session.rollback()
             error = 'Number of characters exceeds maximum'

@@ -3,7 +3,6 @@
 Tell me what're thinking
 
 ## Description
----
 
 The main tools I choosed to make it happen were:
 - A python's micro web framework very well known called **Flask**;
@@ -13,12 +12,12 @@ The main tools I choosed to make it happen were:
 - And all of this together on a **MVC** (model-view-controller) pattern
 
 ## Requirements
----
+
 - Python 3.x
 - Docker
 - Docker-compose
 
-## Other
+## Public utility
 
 - chmod +x services/web/entrypoint.sh
 

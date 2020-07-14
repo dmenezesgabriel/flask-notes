@@ -1,9 +1,9 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, redirect, render_template, request, url_for
 )
 from werkzeug.exceptions import abort
 from sqlalchemy.exc import DataError
-from src.views.auth import login_required
+from flask_login import login_required, current_user
 from src.models.models import db, User, Note
 from src.forms import forms
 
@@ -27,7 +27,7 @@ def index():
             User.id.label('user_id'),
             User.username
         )
-        .filter_by(author_id=g.user.id)
+        .filter_by(author_id=current_user.id)
         .order_by(Note.created_at.desc())
         .join(User, User.id == Note.author_id)
         .paginate(page, 5, False)
@@ -63,7 +63,8 @@ def create():
 
         else:
             try:
-                new_note = Note(title=title, body=body, author_id=g.user.id)
+                new_note = Note(
+                    title=title, body=body, author_id=current_user.id)
                 db.session.add(new_note)
                 db.session.commit()
                 return redirect(url_for('notes.index'))
@@ -86,7 +87,7 @@ def get_note(id, check_author=True):
     if note is None:
         abort(404, "Post id {0} doesn't exist.".format(id))
 
-    if check_author and note.author_id != g.user.id:
+    if check_author and note.author_id != current_user.id:
         abort(403)
 
     return note
