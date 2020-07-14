@@ -15,8 +15,10 @@ bp = Blueprint('user', __name__)
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-
-    return render_template('user/user.html', user=user)
+    if current_user.username == username:
+        return render_template('user/user.html', user=user)
+    else:
+        return render_template('error/404.html'), 404
 
 
 @bp.route('/user/<username>/update', methods=('GET', 'POST'))
@@ -24,6 +26,9 @@ def user(username):
 def update(username):
     user = User.query.filter_by(username=username).first_or_404()
     form = EditProfileForm(obj=user)
+
+    if current_user.username != username:
+        return render_template('error/404.html'), 404
 
     if request.method == 'POST':
         username = request.form['username']
