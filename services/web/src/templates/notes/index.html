@@ -3,7 +3,7 @@
 
 {% block content %}
   <div class="p-3">
-    {% if g.user %}
+    {% if current_user.is_authenticated %}
       <a class="btn btn-success" href="{{ url_for('notes.create') }}" role="button">Add Note</a>
     {% endif %}
   </div>
@@ -13,7 +13,7 @@
         <div class="d-flex">
           <h2 class="mr-sm-3">{{ note.title }}</h2>
           <div class="p-1">
-            {% if g.user.id == note.author_id %}
+            {% if current_user.id == note.author_id %}
             <form action="{{ url_for('notes.delete', id=note['id']) }}" method="note">
                 <a class="btn btn-secondary btn-sm" href="{{ url_for('notes.update', id=note.id) }}" role="button">Edit</a>
                 <input class="btn btn-danger btn-sm" type="submit" value="Delete" onclick="return confirm('Are you sure?');">

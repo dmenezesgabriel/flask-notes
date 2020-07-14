@@ -1,21 +1,22 @@
-import functools
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, redirect, render_template, request, url_for
 )
-# from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.urls import url_parse
 from sqlalchemy.exc import DataError
 from src.models.models import db, User
 from src.forms.forms import Register, Login
-from flask_bcrypt import Bcrypt, generate_password_hash, check_password_hash
+from flask_bcrypt import generate_password_hash, check_password_hash
+from flask_login import current_user, login_user, logout_user
 
 
-bcrypt = Bcrypt()
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     form = Register()
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -24,9 +25,12 @@ def register():
         error = None
 
         user = User.query.filter_by(username=username).first()
+        user_email = User.query.filter_by(email=email).first()
 
         if user is not None:
             error = 'User {} is already registered.'.format(username)
+        elif user_email is not None:
+            error = 'Email {} is already registered.'.format(email)
 
         if not form.validate_on_submit():
             error = 'Invalid form params'
@@ -57,6 +61,8 @@ def register():
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = Login()
     if request.method == 'POST':
         username = request.form['username']
@@ -69,43 +75,23 @@ def login():
             flash(error, 'danger')
             return render_template('auth/login.html', form=form)
 
-        if user is None:
-            error = 'Incorrect username.'
-        elif not check_password_hash(user.password, password):
-            error = 'Incorrect password.'
+        if user is None or not check_password_hash(user.password, password):
+            error = 'Invalid username or password.'
 
         if error is None:
-            session.clear()
-            session['user_id'] = user.id
-            return redirect(url_for('index'))
+            login_user(user, remember=form.remember_me.data)
+            next_page = request.args.get('next')
+            if not next_page or url_parse(next_page).netloc != '':
+                next_page = url_for('index')
+            return redirect(next_page)
 
         flash(error, 'danger')
 
     return render_template('auth/login.html', form=form)
 
 
-@bp.before_app_request
-def load_logged_in_user():
-    user_id = session.get('user_id')
-
-    if user_id is None:
-        g.user = None
-    else:
-        g.user = User.query.filter_by(id=user_id).first()
-
-
 @bp.route('/logout')
 def logout():
-    session.clear()
+    logout_user()
     return redirect(url_for('index'))
 
-
-def login_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('auth.login'))
-
-        return view(**kwargs)
-
-    return wrapped_view

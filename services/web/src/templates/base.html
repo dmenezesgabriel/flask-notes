@@ -14,12 +14,12 @@
   <nav class="navbar navbar-dark bg-dark">
     <a class="navbar-brand" href="/">Flask Notes</a>
     <ul class="nav">
-      {% if g.user %}
-        <li class="nav-item"><a class="nav-link nav-item dropdown text-white mr-sm-3" href="{{ url_for('user.user', username=g.user.username) }}" role="button">{{ g.user.username }}</a></li>
-        <li class="nav-item"><a class="nav-link btn btn-secondary" href="{{ url_for('auth.logout') }}" role="button">Log Out</a></li>
-      {% else %}
+      {% if current_user.is_anonymous %}
         <li class="nav-item mr-sm-2"><a class="nav-link btn btn-secondary" href="{{ url_for('auth.register') }}" role="button">Register</a></li>
         <li class="nav-item"><a class="nav-link btn btn-secondary" href="{{ url_for('auth.login') }}" role="button">Log In</a></li>
+        {% else %}
+        <li class="nav-item"><a class="nav-link nav-item dropdown text-white mr-sm-3" href="{{ url_for('user.user', username=current_user.username) }}" role="button">{{ current_user.username }}</a></li>
+        <li class="nav-item"><a class="nav-link btn btn-secondary" href="{{ url_for('auth.logout') }}" role="button">Log Out</a></li>
       {% endif %}
     </ul>
   </nav>

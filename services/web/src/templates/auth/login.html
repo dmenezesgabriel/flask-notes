@@ -7,7 +7,7 @@
     <h1>Login</h1>
   {% endblock %}
   <hr>
-  <form method="post" action="">
+  <form method="post" action="" novalidate>
     {{ form.csrf_token }}
     {{ form.hidden_tag() }}
     <div class="form-group">
@@ -38,6 +38,7 @@
         {{ form.password(class="form-control form-control-lg")}}
       {% endif%}
     </div>
+    <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
       {{ form.submit(class="btn btn-success btn-md")}}
   </form>
 </div>

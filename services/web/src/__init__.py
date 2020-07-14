@@ -3,8 +3,8 @@ from flask import Flask, jsonify, render_template
 from src.views import auth, notes, user
 from src.models.models import db, migrate
 from flask_ckeditor import CKEditor
-from src.views.auth import bcrypt
 from src.routes import setup_routes
+from src.helpers.login import login_manager
 
 
 def page_not_found(error):
@@ -50,12 +50,13 @@ def create_app(test_config=None):
     # Init app
     db.init_app(app)
     migrate.init_app(app, db)
+    login_manager.init_app(app)
+    login_manager.login_view = 'auth.login'
     setup_routes(app)
     # WSGIWYG editor
     ckeditor = CKEditor(app)
     app.config['CKEDITOR_HEIGHT'] = 400
     # Bcrypt
-    bcrypt.init_app(app)
 
     # a simple page that says hello
     @app.route('/hello')
