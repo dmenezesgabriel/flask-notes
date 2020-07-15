@@ -1,14 +1,11 @@
 import os
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify
 from src.views import auth, notes, user
 from src.models.models import db, migrate
 from flask_ckeditor import CKEditor
-from src.routes import setup_routes
+# from src.routes import setup_routes
 from src.helpers.login import login_manager
-
-
-def page_not_found(error):
-    return render_template('error/404.html'), 404
+from src.utils.error import setup_error_handler
 
 
 def create_app(test_config=None):
@@ -52,7 +49,6 @@ def create_app(test_config=None):
     migrate.init_app(app, db)
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
-    setup_routes(app)
     # WSGIWYG editor
     ckeditor = CKEditor(app)
     app.config['CKEDITOR_HEIGHT'] = 400
@@ -67,6 +63,5 @@ def create_app(test_config=None):
     app.register_blueprint(user.bp)
     app.register_blueprint(notes.bp)
     app.add_url_rule('/', endpoint='index')
-    app.register_error_handler(404, page_not_found)
-
+    setup_error_handler(app)
     return app

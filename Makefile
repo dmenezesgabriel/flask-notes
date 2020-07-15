@@ -27,3 +27,6 @@ run-prod:
 
 create-db-prod:
 	docker-compose -f docker-compose.prod.yml exec web python manage.py create_db
+
+email-test-server:
+	python -m smtpd -n -c DebuggingServer localhost:8025
