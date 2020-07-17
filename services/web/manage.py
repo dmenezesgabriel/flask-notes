@@ -1,6 +1,7 @@
 from flask.cli import FlaskGroup
 from src import create_app
 from src.models.models import db, TimestampMixin, User, Note
+from flask_bcrypt import generate_password_hash
 
 
 # Configure flask CLI tool to run and manage from the command line
@@ -18,7 +19,12 @@ def create_db():
 @cli.command("seed_db")
 def seed_db():
     db.session.add(
-        User(username="teste", password="teste", email="teste@teste.com"))
+        User(
+            username="teste",
+            password=generate_password_hash("teste").decode('utf-8'),
+            email="teste@teste.com"
+            )
+    )
     db.session.commit()
 
 

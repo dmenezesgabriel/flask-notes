@@ -5,11 +5,20 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(object):
+    """
+    Application default configuration
+    """
+
+    # App
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite://")
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
     STATIC_FOLDER = f"{os.getenv('APP_FOLDER')}/src/static"
     MEDIA_FOLDER = f"{os.getenv('APP_FOLDER')}/src/media"
+    CKEDITOR_HEIGHT = 400
+    NOTES_PER_PAGE = 5
+
+    # Database
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite://")
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Email server
     MAIL_SERVER = os.getenv('MAIL_SERVER')

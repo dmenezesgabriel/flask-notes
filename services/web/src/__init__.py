@@ -1,14 +1,20 @@
-import os
 from flask import Flask, jsonify
-from src.views import auth, notes, user
+from src.views import auth, notes, user, errors
 from src.models.models import db, migrate
 from flask_ckeditor import CKEditor
 # from src.routes import setup_routes
 from src.helpers.login import login_manager
-from src.utils.error import setup_error_handler
 
 
-def create_app(test_config=None):
+_blueprints = (auth.bp, notes.bp, user.bp, errors.bp)
+
+
+def init_blueprints(app):
+    for bp in _blueprints:
+        app.register_blueprint(bp)
+
+
+def create_app():
     """
     Application Factory funcion which makes possibleto instantiate different
     app environments
@@ -22,46 +28,22 @@ def create_app(test_config=None):
     Flask app object
     """
     # Create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
-    app.config['POSTS_PER_PAGE'] = 5
-    # Deafault config
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE_PATH=os.path.join(app.instance_path, 'database-prod.db')
-    )
+    app = Flask(__name__)
 
-    if test_config is None:
-        # load the instance config, if exists, when not testing
-        # Overrides the default configuration
-        app.config.from_object('src.config.Config')
-    else:
-        # Load the test config if passed in
-        app.config.from_mapping(test_config)
-
-    # Ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
-
+    app.config.from_object('src.config.Config')
     # Init app
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
     # WSGIWYG editor
-    ckeditor = CKEditor(app)
-    app.config['CKEDITOR_HEIGHT'] = 400
-    # Bcrypt
+    CKEditor(app)
+    # Register blueprints
+    init_blueprints(app)
 
     # a simple page that says hello
     @app.route('/hello')
     def hello():
         return jsonify(hello="world")
 
-    app.register_blueprint(auth.bp)
-    app.register_blueprint(user.bp)
-    app.register_blueprint(notes.bp)
-    app.add_url_rule('/', endpoint='index')
-    setup_error_handler(app)
     return app

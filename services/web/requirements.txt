@@ -1,12 +1,12 @@
 flask==1.1.1
 flask-sqlalchemy===2.4.1
 flask-migrate==2.5.2
-psycopg2-binary==2.8.4
-gunicorn==20.0.4
 flask-login
-email-validator
 flask-wtf
 flask-ckeditor
 flask-bcrypt
 flask-mail
+psycopg2-binary==2.8.4
+gunicorn==20.0.4
+email-validator
 pyjwt
