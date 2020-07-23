@@ -4,6 +4,7 @@ from src.models.models import db, migrate
 from flask_ckeditor import CKEditor
 # from src.routes import setup_routes
 from src.helpers.login import login_manager
+from config import Config
 
 
 _blueprints = (auth.bp, notes.bp, user.bp, errors.bp)
@@ -30,12 +31,13 @@ def create_app():
     # Create and configure the app
     app = Flask(__name__)
 
-    app.config.from_object('src.config.Config')
+    app.config.from_object(Config)
     # Init app
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
+    login_manager.login_message_category = "info"
     # WSGIWYG editor
     CKEditor(app)
     # Register blueprints
