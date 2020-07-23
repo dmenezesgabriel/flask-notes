@@ -23,3 +23,6 @@ The main tools I choosed to make it happen were:
 
 ## Reference
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+- [Test Driven](https://testdriven.io/blog/dockerizing-flask-with-postgres-gunicorn-and-nginx/)
+- [Flask Mega Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
+- [SQL Designer](https://ondras.zarovi.cz/sql/demo/)
