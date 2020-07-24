@@ -1,4 +1,5 @@
 from datetime import datetime
+import hashlib
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import UserMixin
@@ -29,9 +30,14 @@ class User(UserMixin, TimestampMixin, db.Model):
     password = db.Column(db.String(255), index=True, nullable=False)
     email = db.Column(db.String(50), nullable=False)
     notes = db.relationship('Note', backref='author', lazy='dynamic')
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
         return f'<User {self.username}>'
+
+    def avatar(self, size):
+        digest = hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
+        return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
 
 
 class Note(TimestampMixin, db.Model):

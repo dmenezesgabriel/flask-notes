@@ -1,8 +1,9 @@
+from datetime import datetime
 from flask import Flask, jsonify
 from src.views import auth, notes, user, errors
 from src.models.models import db, migrate
 from flask_ckeditor import CKEditor
-# from src.routes import setup_routes
+from flask_login import current_user
 from src.helpers.login import login_manager
 from config import Config
 
@@ -47,5 +48,11 @@ def create_app():
     @app.route('/hello')
     def hello():
         return jsonify(hello="world")
+
+    @app.before_request
+    def before_request():
+        if current_user.is_authenticated:
+            current_user.last_seen = datetime.utcnow()
+            db.session.commit()
 
     return app
