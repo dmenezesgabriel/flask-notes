@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, redirect, render_template, request, url_for
+    Blueprint, flash, redirect, render_template, request, url_for, current_app
 )
 from werkzeug.exceptions import abort
 from sqlalchemy.exc import DataError
@@ -30,7 +30,7 @@ def index():
         .filter_by(author_id=current_user.id)
         .order_by(Note.created_at.desc())
         .join(User, User.id == Note.author_id)
-        .paginate(page, 5, False)
+        .paginate(page, current_app.config['NOTES_PER_PAGE'], False)
 
     )
     # Pagination
