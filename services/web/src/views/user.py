@@ -35,6 +35,12 @@ def update(username):
         email = request.form['email']
         error = None
 
+        # Don't change username to an existing user's username
+        if user.username != username:
+            get_user = User.query.filter_by(username=username).first()
+            if get_user is not None:
+                raise Exception('Please use a different username.')
+
         user.username = username
         user.email = email
         try:
