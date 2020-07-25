@@ -2,7 +2,6 @@ from flask import (
     Blueprint, flash, redirect, render_template, request, url_for
 )
 from werkzeug.urls import url_parse
-from sqlalchemy.exc import DataError
 from src.models.models import db, User
 from src.forms.forms import Register, Login
 from flask_bcrypt import generate_password_hash, check_password_hash
@@ -18,43 +17,18 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('notes.index'))
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        password_hash = generate_password_hash(password).decode('utf-8')
-        email = request.form['email']
-        error = None
-
-        user = User.query.filter_by(username=username).first()
-        user_email = User.query.filter_by(email=email).first()
-
-        if user is not None:
-            error = 'User {} is already registered.'.format(username)
-        elif user_email is not None:
-            error = 'Email {} is already registered.'.format(email)
-
-        if not form.validate_on_submit():
-            error = 'Invalid form params'
-            flash(error, 'danger')
-            return render_template('auth/register.html', form=form)
-
-        if error is None:
-            try:
-                new_user = User(
-                    username=username,
-                    password=password_hash,
-                    email=email
-                )
-                db.session.add(new_user)
-                db.session.commit()
-                return redirect(url_for('auth.login'))
-                message = 'registered with success'
-                flash(message, 'success')
-            except DataError:
-                db.session.rollback()
-                error = 'Number of characters exceeds maximum'
-                flash(error, 'danger')
-
-        flash(error, 'danger')
+        if form.validate_on_submit():
+            user = User(
+                username=form.username.data,
+                password=(
+                    generate_password_hash(form.password.data).decode('utf-8')
+                ),
+                email=form.email.data
+            )
+            db.session.add(user)
+            db.session.commit()
+            flash('Congratulations, you are now a registered user!', 'success')
+            return redirect(url_for('auth.login'))
 
     return render_template('auth/register.html', form=form)
 
