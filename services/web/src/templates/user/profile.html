@@ -13,7 +13,7 @@
 		<h2 class="mr-sm-3">{{ user.username }}</h2>
 		<p>Last seen: {{ user.last_seen }}</p>
 		<div class="p-1">
-		<a class="btn btn-secondary btn-sm" href="{{ url_for('user.update', username=current_user.username) }}" role="button">Edit</a>
+		<a class="btn btn-secondary btn-sm" href="{{ url_for('user.edit_profile', username=current_user.username) }}" role="button">Edit</a>
 		</div>
       </div>
 			<div class="card-body">
