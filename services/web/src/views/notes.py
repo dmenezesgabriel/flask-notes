@@ -43,8 +43,13 @@ def index():
         if notes.has_prev else None
     )
 
-    return render_template('notes/index.html', notes=notes.items,
-                           next_url=next_url, prev_url=prev_url)
+    return render_template(
+        'notes/index.html',
+        title='Notes',
+        notes=notes.items,
+        next_url=next_url,
+        prev_url=prev_url
+    )
 
 
 @bp.route('/create', methods=('GET', 'POST'))
@@ -73,7 +78,7 @@ def create():
                 error = 'Number of characters exceeds maximum'
                 flash(error, 'danger')
 
-    return render_template('notes/create.html', form=form)
+    return render_template('notes/create.html', title='New Note', form=form)
 
 
 def get_note(id, check_author=True):
@@ -120,7 +125,8 @@ def update(id):
             error = 'Number of characters exceeds maximum'
             flash(error, 'danger')
 
-    return render_template('notes/update.html', note=note, form=form)
+    return render_template('notes/update.html', title='Edit Note', note=note,
+                           form=form)
 
 
 @bp.route('/<int:id>/delete', methods=('POST', 'GET'))

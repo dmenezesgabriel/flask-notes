@@ -26,7 +26,7 @@ def register():
             flash('Congratulations, you are now a registered user!', 'success')
             return redirect(url_for('auth.login'))
 
-    return render_template('auth/register.html', form=form)
+    return render_template('auth/register.html', title='Sign Up', form=form)
 
 
 @bp.route('/login', methods=('GET', 'POST'))
@@ -50,7 +50,7 @@ def login():
             next_page = url_for('notes.index')
         return redirect(next_page)
 
-    return render_template('auth/login.html', form=form)
+    return render_template('auth/login.html', title='Sign In', form=form)
 
 
 @bp.route('/logout')
@@ -92,4 +92,5 @@ def reset_password(token):
         db.session.commit()
         flash('Your password has been reset.', 'success')
         return redirect(url_for('auth.login'))
-    return render_template('auth/reset_password.html', form=form)
+    return render_template('auth/reset_password.html', title='Reset Password',
+                           form=form)

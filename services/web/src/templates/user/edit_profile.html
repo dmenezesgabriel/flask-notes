@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}Edit user{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block content %}
   <div class="p-3">
     {% block header %}
-    <h1>Edit "{{ current_user.username }}"</h1>
+    <h1>{{ title }}</h1>
     {% endblock %}
     <hr>
     <form method="post" action="">
