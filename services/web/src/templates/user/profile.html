@@ -11,7 +11,7 @@
       <div class="card-header">
 		<img class="mb-3" src="{{ user.avatar(128) }}">
 		<h2 class="mr-sm-3">{{ user.username }}</h2>
-		<p>Last seen: {{ user.last_seen }}</p>
+		<p>Last seen on: {{ moment(user.last_seen).format('LLL') }}</p>
 		<div class="p-1">
 		<a class="btn btn-secondary btn-sm" href="{{ url_for('user.edit_profile', username=current_user.username) }}" role="button">Edit</a>
 		</div>
