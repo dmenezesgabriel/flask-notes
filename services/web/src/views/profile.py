@@ -14,7 +14,7 @@ bp = Blueprint('user', __name__)
 @login_required
 def profile():
     user = User.query.filter_by(username=current_user.username).first()
-    return render_template('user/profile.html', user=user)
+    return render_template('user/profile.html', title='Profile', user=user)
 
 
 @bp.route('/edit_profile', methods=('GET', 'POST'))
@@ -30,4 +30,5 @@ def edit_profile():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-    return render_template('user/edit_profile.html', form=form)
+    return render_template('user/edit_profile.html', title='Edit Profile',
+                           form=form)
