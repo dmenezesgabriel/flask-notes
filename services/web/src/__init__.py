@@ -3,7 +3,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 from flask import Flask, jsonify
-from src.views import auth, notes, user, errors
+from src.views import auth, notes, profile, errors
 from src.models.models import db, migrate
 from flask_ckeditor import CKEditor
 from flask_login import current_user
@@ -11,7 +11,7 @@ from src.helpers.login import login_manager
 from config import Config
 
 
-_blueprints = (auth.bp, notes.bp, user.bp, errors.bp)
+_blueprints = (auth.bp, notes.bp, profile.bp, errors.bp)
 
 
 def init_blueprints(app):
