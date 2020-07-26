@@ -8,6 +8,7 @@ from src.models.models import db, migrate
 from flask_ckeditor import CKEditor
 from flask_login import current_user
 from src.helpers.login import login_manager
+from src.helpers.email import mail
 from config import Config
 
 
@@ -42,6 +43,7 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
     login_manager.login_message_category = "info"
+    mail.init_app(app)
     # WSGIWYG editor
     CKEditor(app)
     # Register blueprints
