@@ -3,6 +3,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 from flask import Flask, jsonify
+from flask_moment import Moment
 from src.views import auth, notes, profile, errors
 from src.models.models import db, migrate
 from flask_ckeditor import CKEditor
@@ -13,6 +14,7 @@ from config import Config
 
 
 _blueprints = (auth.bp, notes.bp, profile.bp, errors.bp)
+moment = Moment()
 
 
 def init_blueprints(app):
@@ -44,6 +46,7 @@ def create_app():
     login_manager.login_view = 'auth.login'
     login_manager.login_message_category = "info"
     mail.init_app(app)
+    moment.init_app(app)
     # WSGIWYG editor
     CKEditor(app)
     # Register blueprints

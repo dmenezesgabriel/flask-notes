@@ -9,6 +9,8 @@
   <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/jquery-3.5.1.slim.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/all.min.js') }}"></script>
+  {{ moment.include_jquery() }}
+  {{ moment.include_moment() }}
 </head>
 <body>
   <!-- Include Navbar -->
