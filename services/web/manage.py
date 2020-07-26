@@ -18,16 +18,10 @@ def create_db():
 
 @cli.command("seed_db")
 def seed_db():
-    user_a = User(
-        username="teste",
-        password=generate_password_hash("teste").decode('utf-8'),
-        email="teste@teste.com"
-        )
-    user_b = User(
-        username="teste2",
-        password=generate_password_hash("teste2").decode('utf-8'),
-        email="teste2@teste.com"
-        )
+    user_a = User(username="teste", email="teste@teste.com")
+    user_a.set_password("teste")
+    user_b = User(username="teste2", email="teste2@teste.com")
+    user_b.set_password("teste2")
     db.session.add(user_a)
     db.session.add(user_b)
     db.session.commit()
