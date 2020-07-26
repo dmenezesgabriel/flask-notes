@@ -2,7 +2,7 @@ build-dev:
 	docker-compose build --no-cache
 
 run-dev:
-	docker-compose up -d
+	docker-compose up
 
 create-db:
 	docker-compose exec web python manage.py create_db
