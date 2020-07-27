@@ -2,7 +2,7 @@ from datetime import datetime
 import logging
 from logging.handlers import RotatingFileHandler
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, g
 from flask_moment import Moment
 from flask_babel import Babel
 from flask_babel import lazy_gettext as _l
@@ -67,6 +67,7 @@ def create_app():
         if current_user.is_authenticated:
             current_user.last_seen = datetime.utcnow()
             db.session.commit()
+            g.locale = str(get_locale())
 
     # Logging config
     if not os.path.exists('logs'):

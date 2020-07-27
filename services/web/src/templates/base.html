@@ -11,6 +11,7 @@
   <script src="{{ url_for('static', filename='js/all.min.js') }}"></script>
   {{ moment.include_jquery() }}
   {{ moment.include_moment() }}
+  {{ moment.lang(g.locale) }}
 </head>
 <body>
   <!-- Include Navbar -->

@@ -1,7 +1,8 @@
+import os
+import click
 from flask.cli import FlaskGroup
 from src import create_app
 from src.models.models import db, TimestampMixin, User, Note
-from flask_bcrypt import generate_password_hash
 
 
 # Configure flask CLI tool to run and manage from the command line
@@ -25,6 +26,41 @@ def seed_db():
     db.session.add(user_a)
     db.session.add(user_b)
     db.session.commit()
+
+
+@cli.group()
+def translate():
+    """Translation and location commands"""
+    pass
+
+
+@translate.command()
+def update():
+    """Update all languages."""
+    if os.system('pybabel extract -F babel.cfg -k _l -o messages.pot .'):
+        raise RuntimeError('Extract command failed')
+    if os.system('pybabel update -i messages.pot -d src/translations'):
+        raise RuntimeError('Update command failed')
+    os.remove('messages.pot')
+
+
+@translate.command()
+def compile():
+    """Compile all languages."""
+    if os.system('pybabel compile -d src/translations'):
+        raise RuntimeError('compile command failed')
+
+
+@translate.command()
+@click.argument('lang')
+def init(lang):
+    """Initialize a new language."""
+    if os.system('pybabel extract -F babel.cfg -k _l -o messages.pot .'):
+        raise RuntimeError('extract command failed')
+    if os.system(
+            'pybabel init -i messages.pot -d src/translations -l ' + lang):
+        raise RuntimeError('init command failed')
+    os.remove('messages.pot')
 
 
 if __name__ == "__main__":
