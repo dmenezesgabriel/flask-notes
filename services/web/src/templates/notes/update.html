@@ -4,7 +4,7 @@
 {% block content %}
   <div class="p-3">
     {% block header %}
-    <h1>Edit "{{ note['title'] }}"</h1>
+    <h1>{{ _('Edit') }} "{{ note['title'] }}"</h1>
     {% endblock %}
     <hr>
     <form method="post" action="" novalidate>
@@ -42,7 +42,7 @@
     </form>
     <hr>
     <form action="{{ url_for('notes.delete', id=note['id']) }}" method="note">
-      <input class="btn btn-danger btn-md" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+      <input class="btn btn-danger btn-md" type="submit" value="Delete" onclick="return confirm({{ _l('Are you sure?') }});">
     </form>
   </div>
   {{  ckeditor.load() }}

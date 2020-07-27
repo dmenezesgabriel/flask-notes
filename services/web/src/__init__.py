@@ -2,8 +2,10 @@ from datetime import datetime
 import logging
 from logging.handlers import RotatingFileHandler
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_moment import Moment
+from flask_babel import Babel
+from flask_babel import lazy_gettext as _l
 from src.views import auth, notes, profile, errors
 from src.models.models import db, migrate
 from flask_ckeditor import CKEditor
@@ -15,6 +17,7 @@ from config import Config
 
 _blueprints = (auth.bp, notes.bp, profile.bp, errors.bp)
 moment = Moment()
+babel = Babel()
 
 
 def init_blueprints(app):
@@ -44,9 +47,11 @@ def create_app():
     migrate.init_app(app, db)
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
-    login_manager.login_message_category = "info"
+    login_manager.login_message_category = 'info'
+    login_manager.login_message = _l('Please log in to access this page.')
     mail.init_app(app)
     moment.init_app(app)
+    babel.init_app(app)
     # WSGIWYG editor
     CKEditor(app)
     # Register blueprints
@@ -75,5 +80,16 @@ def create_app():
 
     app.logger.setLevel(logging.INFO)
     app.logger.info('Flask Notes startup')
+
+    @babel.localeselector
+    def get_locale():
+        """
+        Accept-Language header provides a a list of preferred languages,
+        each with a weight.
+
+        ex: Accept-Language: da, en-gb;q=0.8, en;q=0.7
+        """
+
+        return request.accept_languages.best_match(app.config['LANGUAGES'])
 
     return app

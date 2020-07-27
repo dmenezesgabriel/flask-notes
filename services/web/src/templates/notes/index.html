@@ -4,7 +4,7 @@
 {% block content %}
   <div class="p-3">
     {% if current_user.is_authenticated %}
-      <a class="btn btn-success" href="{{ url_for('notes.create') }}" role="button">Add Note</a>
+      <a class="btn btn-success" href="{{ url_for('notes.create') }}" role="button">{{ _('Add Note') }}</a>
     {% endif %}
   </div>
   {% for note in notes %}
@@ -15,7 +15,7 @@
           <div class="p-1">
             {% if current_user.id == note.author_id %}
             <form action="{{ url_for('notes.delete', id=note['id']) }}" method="note">
-                <a class="btn btn-secondary btn-sm" href="{{ url_for('notes.update', id=note.id) }}" role="button">Edit</a>
+                <a class="btn btn-secondary btn-sm" href="{{ url_for('notes.update', id=note.id) }}" role="button">{{ _('Edit') }}</a>
                 <input class="btn btn-danger btn-sm" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
               </form>
               {% endif %}
@@ -33,10 +33,10 @@
   {% endfor %}
   <div class="mt-3">
     {% if prev_url %}
-    <a class="btn btn-secondary mr-sm-2" href="{{ prev_url }}">Newer notes</a>
+    <a class="btn btn-secondary mr-sm-2" href="{{ prev_url }}">{{ _('Newer notes') }}</a>
     {% endif %}
     {% if next_url %}
-    <a class="btn btn-secondary" href="{{ next_url }}">Older notes</a>
+    <a class="btn btn-secondary" href="{{ next_url }}">{{ _('Older notes') }}</a>
     {% endif %}
   </div>
 {% endblock %}
