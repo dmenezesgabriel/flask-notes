@@ -41,7 +41,7 @@ class Login(FlaskForm):
         _l('Username'), validators=[DataRequired(), length(min=3, max=20)])
     password = PasswordField(
         _l('Password'), validators=[DataRequired(), length(min=3, max=20)])
-    remember_me = BooleanField('Remember Me')
+    remember_me = BooleanField(_l('Remember Me'))
     submit = SubmitField(_l('Submit'))
 
 

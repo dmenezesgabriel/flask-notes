@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-07-27 14:33+0000\n"
-"PO-Revision-Date: 2020-07-26 23:00+0000\n"
+"POT-Creation-Date: 2020-07-27 23:43+0000\n"
+"PO-Revision-Date: 2020-07-27 23:42+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt\n"
 "Language-Team: pt <LL@li.org>\n"
@@ -20,189 +20,187 @@ msgstr ""
 
 #: src/__init__.py:51
 msgid "Please log in to access this page."
-msgstr "Por favor, faça o login para acessar esta pagina"
+msgstr ""
 
 #: src/forms/forms.py:13 src/forms/forms.py:41 src/forms/forms.py:61
 msgid "Username"
-msgstr "Usuário"
+msgstr ""
 
 #: src/forms/forms.py:15 src/forms/forms.py:63 src/forms/forms.py:79
 msgid "Email"
-msgstr "Email"
+msgstr ""
 
 #: src/forms/forms.py:18 src/forms/forms.py:43 src/forms/forms.py:85
 msgid "Password"
-msgstr "Senha"
+msgstr ""
 
 #: src/forms/forms.py:20 src/forms/forms.py:87
 msgid "Confirm Password"
-msgstr "Confirme a sua senha"
+msgstr ""
 
 #: src/forms/forms.py:23 src/forms/forms.py:45 src/forms/forms.py:56
 #: src/forms/forms.py:65 src/forms/forms.py:90
 msgid "Submit"
-msgstr "Confirmar"
+msgstr ""
 
 #: src/forms/forms.py:31 src/forms/forms.py:75
 msgid "Please use a different username."
-msgstr "Por favor utilize um nome de usuário diferente"
+msgstr ""
 
 #: src/forms/forms.py:36
 msgid "Please use a different email address."
-msgstr "Por favor utilize um email diferente"
+msgstr ""
+
+#: src/forms/forms.py:44
+msgid "Remember Me"
+msgstr ""
 
 #: src/forms/forms.py:50
 msgid "Title"
-msgstr "Titulo"
+msgstr ""
 
 #: src/forms/forms.py:52
 msgid "Body"
-msgstr "Texto"
+msgstr ""
 
 #: src/forms/forms.py:80 src/forms/forms.py:91
 msgid "Request Password Reset"
-msgstr "Resetar senha"
+msgstr ""
 
 #: src/templates/_navbar.html:5
 msgid "Register"
-msgstr "Cadastro"
+msgstr ""
 
 #: src/templates/_navbar.html:6
 msgid "Log In"
-msgstr "Login"
+msgstr ""
 
 #: src/templates/_navbar.html:9
 msgid "Log Out"
-msgstr "Logout"
+msgstr ""
 
-#: src/templates/base.html:36
+#: src/templates/base.html:37
 msgid "Made with Flask"
-msgstr "Feito com Flask"
+msgstr ""
 
 #: src/templates/auth/login.html:45
 msgid "New User ?"
-msgstr "Não tem cadastro ?"
+msgstr ""
 
 #: src/templates/auth/login.html:46 src/templates/auth/login.html:50
 msgid "Click Here"
-msgstr "Clique aqui"
+msgstr ""
 
 #: src/templates/auth/login.html:49
 msgid "Forgot Your Password ?"
-msgstr "Esqueceu a senha ?"
+msgstr ""
 
 #: src/templates/error/404.html:10
 msgid "Back"
-msgstr "Voltar"
+msgstr ""
 
 #: src/templates/notes/index.html:7
 msgid "Add Note"
-msgstr "Adicionar nota"
+msgstr ""
 
 #: src/templates/notes/index.html:18 src/templates/notes/update.html:7
 #: src/templates/user/profile.html:16
 msgid "Edit"
-msgstr "Editar"
+msgstr ""
 
 #: src/templates/notes/index.html:36
 msgid "Newer notes"
-msgstr "Mais recente"
+msgstr ""
 
 #: src/templates/notes/index.html:39
 msgid "Older notes"
-msgstr "Mais antigo"
+msgstr ""
 
 #: src/templates/notes/update.html:45
 msgid "Are you sure?"
-msgstr "Você tem certeza ?"
+msgstr ""
 
 #: src/templates/user/profile.html:14
 msgid "Last seen on:"
-msgstr "Último acesso"
+msgstr ""
 
 #: src/templates/user/profile.html:20
 msgid "Username:"
-msgstr "Usuário"
+msgstr ""
 
 #: src/templates/user/profile.html:21
 msgid "Email:"
-msgstr "Email"
+msgstr ""
 
 #: src/views/auth.py:28
 msgid "Congratulations, you are now a registered user!"
-msgstr "Parabéns, você foi registrado"
+msgstr ""
 
 #: src/views/auth.py:33
 msgid "Sign Up"
-msgstr "Cadastro"
+msgstr ""
 
 #: src/views/auth.py:44
 msgid "Invalid username or password"
-msgstr "Usuário ou senha invalidos"
+msgstr ""
 
 #: src/views/auth.py:57
 msgid "Sign In"
-msgstr "Login"
+msgstr ""
 
 #: src/views/auth.py:80
 msgid "Check your email for the instructions to reset your password"
-msgstr "Verifique seu email para instruções de como resetar sua senha"
+msgstr ""
 
 #: src/views/auth.py:85 src/views/auth.py:103
 msgid "Reset Password"
-msgstr "Resetar senha"
+msgstr ""
 
 #: src/views/auth.py:99
 msgid "Your password has been reset."
-msgstr "Sua senha foi resetada"
+msgstr ""
 
 #: src/views/errors.py:12
 msgid "Page Not Found 404"
-msgstr "Pagina não encontrada 404"
+msgstr ""
 
 #: src/views/errors.py:19
 msgid "Internal Server Error"
-msgstr "Erro interno"
+msgstr ""
 
 #: src/views/notes.py:49
 msgid "Notes"
-msgstr "Notas"
+msgstr ""
 
 #: src/views/notes.py:65 src/views/notes.py:113
 msgid "Invalid form params"
-msgstr "Parametros de formulário invalidos"
+msgstr ""
 
 #: src/views/notes.py:77 src/views/notes.py:121
 msgid "Number of characters exceeds maximum"
-msgstr "Número de caracteres excede o máximo"
+msgstr ""
 
 #: src/views/notes.py:79
 msgid "New Note"
-msgstr "Nova nota"
+msgstr ""
 
 #: src/views/notes.py:91
 msgid "Note id {} doesn't exist."
-msgstr "Nota {} não existe"
+msgstr ""
 
 #: src/views/notes.py:125
 msgid "Edit Note"
-msgstr "Editar Nota"
+msgstr ""
 
 #: src/views/profile.py:17
 msgid "Profile"
-msgstr "Perfil"
+msgstr ""
 
 #: src/views/profile.py:28
 msgid "Your changes have been saved."
-msgstr "Suas mudanças foram salvas"
+msgstr ""
 
 #: src/views/profile.py:33
 msgid "Edit Profile"
-msgstr "Editar perfil"
-
-#~ msgid "Please use a different email address"
-#~ msgstr "Por favor utilize um email diferente"
-
-#~ msgid "Post id {} doesn't exist."
-#~ msgstr "Nota não existe"
+msgstr ""
 
