@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-07-27 11:50+0000\n"
+"POT-Creation-Date: 2020-07-27 14:33+0000\n"
 "PO-Revision-Date: 2020-07-26 23:00+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt\n"
@@ -195,6 +195,10 @@ msgstr "Perfil"
 #: src/views/profile.py:28
 msgid "Your changes have been saved."
 msgstr "Suas mudanças foram salvas"
+
+#: src/views/profile.py:33
+msgid "Edit Profile"
+msgstr "Editar perfil"
 
 #~ msgid "Please use a different email address"
 #~ msgstr "Por favor utilize um email diferente"
