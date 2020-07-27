@@ -18,8 +18,14 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     STATIC_FOLDER = f"{os.getenv('APP_FOLDER')}/src/static"
     MEDIA_FOLDER = f"{os.getenv('APP_FOLDER')}/src/media"
-    CKEDITOR_HEIGHT = 400
     NOTES_PER_PAGE = 5
+
+    # Extensions
+    # CK editor
+    CKEDITOR_HEIGHT = 400
+
+    # Babel
+    LANGUAGES = ['en', 'pt']
 
     # Database
     SQLALCHEMY_DATABASE_URI = os.getenv(

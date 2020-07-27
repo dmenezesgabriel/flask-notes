@@ -4,6 +4,7 @@ from flask import (
 from werkzeug.exceptions import abort
 from sqlalchemy.exc import DataError
 from flask_login import login_required, current_user
+from flask_babel import _
 from src.models.models import db, User, Note
 from src.forms import forms
 
@@ -45,7 +46,7 @@ def index():
 
     return render_template(
         'notes/index.html',
-        title='Notes',
+        title=_('Notes'),
         notes=notes.items,
         next_url=next_url,
         prev_url=prev_url
@@ -59,11 +60,9 @@ def create():
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
-        error = None
 
         if not form.validate_on_submit():
-            error = 'Invalid form params'
-            flash(error, 'danger')
+            flash(_('Invalid form params'), 'danger')
             return render_template('notes/create.html', form=form)
 
         else:
@@ -75,10 +74,9 @@ def create():
                 return redirect(url_for('notes.index'))
             except DataError:
                 db.session.rollback()
-                error = 'Number of characters exceeds maximum'
-                flash(error, 'danger')
+                flash(_('Number of characters exceeds maximum'), 'danger')
 
-    return render_template('notes/create.html', title='New Note', form=form)
+    return render_template('notes/create.html', title=_('New Note'), form=form)
 
 
 def get_note(id, check_author=True):
@@ -90,7 +88,7 @@ def get_note(id, check_author=True):
     )
 
     if note is None:
-        abort(404, "Post id {0} doesn't exist.".format(id))
+        abort(404, _("Note id {} doesn't exist.".format(id)))
 
     if check_author and note.author_id != current_user.id:
         abort(403)
@@ -107,14 +105,12 @@ def update(id):
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
-        error = None
 
         note.title = title
         note.body = body
         try:
             if not form.validate_on_submit():
-                error = 'Invalid form params'
-                flash(error, 'danger')
+                flash(_('Invalid form params'), 'danger')
                 return render_template(
                     'notes/update.html', note=note, form=form)
 
@@ -122,11 +118,13 @@ def update(id):
             return redirect(url_for('notes.index'))
         except DataError:
             db.session.rollback()
-            error = 'Number of characters exceeds maximum'
-            flash(error, 'danger')
+            flash(_('Number of characters exceeds maximum'), 'danger')
 
-    return render_template('notes/update.html', title='Edit Note', note=note,
-                           form=form)
+    return render_template(
+        'notes/update.html',
+        title=_('Edit Note'),
+        note=note, form=form
+    )
 
 
 @bp.route('/<int:id>/delete', methods=('POST', 'GET'))

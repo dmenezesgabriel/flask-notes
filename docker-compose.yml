@@ -4,7 +4,7 @@ services:
     build: ./services/web
     command: python manage.py run -h 0.0.0.0
     volumes:
-      - ./services/web/:/usr/src/app/
+      - ./services/web/:/usr/src/app/:z
     restart: on-failure
     ports:
       - 5000:5000
@@ -16,7 +16,7 @@ services:
   db:
     image: postgres:12-alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/:z
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

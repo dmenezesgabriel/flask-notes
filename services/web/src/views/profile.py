@@ -1,7 +1,7 @@
 from flask import (
     Blueprint, flash, redirect, render_template, request, url_for
 )
-# from werkzeug.security import check_password_hash, generate_password_hash
+from flask_babel import _
 from src.models.models import db, User
 from flask_login import login_required, current_user
 from src.forms.forms import EditProfileForm
@@ -14,7 +14,7 @@ bp = Blueprint('user', __name__)
 @login_required
 def profile():
     user = User.query.filter_by(username=current_user.username).first()
-    return render_template('user/profile.html', title='Profile', user=user)
+    return render_template('user/profile.html', title=_('Profile'), user=user)
 
 
 @bp.route('/edit_profile', methods=('GET', 'POST'))
@@ -25,7 +25,7 @@ def edit_profile():
         current_user.username = form.username.data
         current_user.email = form.email.data
         db.session.commit()
-        flash('Your changes have been saved.', 'success')
+        flash(_('Your changes have been saved.'), 'success')
         return redirect(url_for('user.edit_profile'))
     elif request.method == 'GET':
         form.username.data = current_user.username

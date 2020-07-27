@@ -42,12 +42,12 @@
     {{ form.submit(class="btn btn-success btn-md")}}
   </form>
   <p>
-    <span class="text-muted">New User?</span>
-    <a href="{{ url_for('auth.register') }}">Click Here</a>
+    <span class="text-muted">{{ _('New User ?') }}</span>
+    <a href="{{ url_for('auth.register') }}">{{ _('Click Here') }}</a>
   </p>
   <p>
-    <span class="text-muted">Forgot Your Password?</span>
-    <a href="{{ url_for('auth.reset_password_request') }}">Click Here</a>
+    <span class="text-muted">{{ _('Forgot Your Password ?') }}</span>
+    <a href="{{ url_for('auth.reset_password_request') }}">{{ _('Click Here') }}</a>
   </p>
 </div>
 {% endblock %}

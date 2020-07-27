@@ -11,14 +11,14 @@
       <div class="card-header">
 		<img class="mb-3" src="{{ user.avatar(128) }}">
 		<h2 class="mr-sm-3">{{ user.username }}</h2>
-		<p>Last seen on: {{ moment(user.last_seen).format('LLL') }}</p>
+		<p>{{ _('Last seen on:') }} {{ moment(user.last_seen).format('LLL') }}</p>
 		<div class="p-1">
-		<a class="btn btn-secondary btn-sm" href="{{ url_for('user.edit_profile', username=current_user.username) }}" role="button">Edit</a>
+		<a class="btn btn-secondary btn-sm" href="{{ url_for('user.edit_profile', username=current_user.username) }}" role="button">{{ _('Edit') }}</a>
 		</div>
       </div>
 			<div class="card-body">
-				<p>Username: {{  user.username }}</p>
-				<p>Email: {{  user.email }}</p>
+				<p>{{ _('Username:') }} {{  user.username }}</p>
+				<p>{{ _('Email:') }} {{  user.email }}</p>
 			</div>
 
 		</div>

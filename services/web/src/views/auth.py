@@ -3,6 +3,8 @@ from flask import (
 )
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user
+from flask_babel import _
+from flask_babel import lazy_gettext as _l
 from src.models.models import db, User
 from src.forms.forms import (
     Register, Login, ResetPasswordRequestForm, ResetPasswordForm)
@@ -23,10 +25,12 @@ def register():
             user.set_password(form.password.data)
             db.session.add(user)
             db.session.commit()
-            flash('Congratulations, you are now a registered user!', 'success')
+            flash(_('Congratulations, you are now a registered user!'),
+                  'success')
             return redirect(url_for('auth.login'))
 
-    return render_template('auth/register.html', title='Sign Up', form=form)
+    return render_template(
+        'auth/register.html', title=_l('Sign Up'), form=form)
 
 
 @bp.route('/login', methods=('GET', 'POST'))
@@ -37,7 +41,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password', 'danger')
+            flash(_('Invalid username or password'), 'danger')
             return redirect(url_for('auth.login'))
         login_user(user, remember=form.remember_me.data)
         # When a user that is not logged in accesses a view function protected
@@ -50,7 +54,7 @@ def login():
             next_page = url_for('notes.index')
         return redirect(next_page)
 
-    return render_template('auth/login.html', title='Sign In', form=form)
+    return render_template('auth/login.html', title=_l('Sign In'), form=form)
 
 
 @bp.route('/logout')
@@ -72,11 +76,13 @@ def reset_password_request():
         # Flash message will appears even if the user exists so that clients
         # cannot use this form to figure out if a given user
         # is a member or not.
-        flash('Check your email for the instructions to reset your password',
-              'info')
+        flash(
+            _('Check your email for the instructions to reset your password'),
+            'info'
+        )
         return redirect(url_for('auth.login'))
     return render_template('auth/reset_password_request.html',
-                           title='Reset Password', form=form)
+                           title=_l('Reset Password'), form=form)
 
 
 @bp.route('/reset_password/<token>', methods=['GET', 'POST'])
@@ -90,7 +96,10 @@ def reset_password(token):
     if form.validate_on_submit():
         user.set_password(form.password.data)
         db.session.commit()
-        flash('Your password has been reset.', 'success')
+        flash(_('Your password has been reset.'), 'success')
         return redirect(url_for('auth.login'))
-    return render_template('auth/reset_password.html', title='Reset Password',
-                           form=form)
+    return render_template(
+        'auth/reset_password.html',
+        title=_l('Reset Password'),
+        form=form
+    )
