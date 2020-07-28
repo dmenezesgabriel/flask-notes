@@ -59,15 +59,16 @@ def create_app(config_class=Config):
         app.logger.setLevel(logging.INFO)
         app.logger.info('Flask Notes startup')
 
-    @babel.localeselector
-    def get_locale():
-        """
-        Accept-Language header provides a a list of preferred languages,
-        each with a weight.
-
-        ex: Accept-Language: da, en-gb;q=0.8, en;q=0.7
-        """
-
-        return request.accept_languages.best_match(app.config['LANGUAGES'])
-
     return app
+
+
+@babel.localeselector
+def get_locale():
+    """
+    Accept-Language header provides a a list of preferred languages,
+    each with a weight.
+
+    ex: Accept-Language: da, en-gb;q=0.8, en;q=0.7
+    """
+
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
