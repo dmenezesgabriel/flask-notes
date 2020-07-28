@@ -2,7 +2,7 @@ import os
 import click
 from flask.cli import FlaskGroup
 from src import create_app
-from src.models.models import db, TimestampMixin, User, Note
+from src.models import db, TimestampMixin, User, Note
 
 
 # Configure flask CLI tool to run and manage from the command line

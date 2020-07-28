@@ -5,8 +5,9 @@ from werkzeug.exceptions import abort
 from sqlalchemy.exc import DataError
 from flask_login import login_required, current_user
 from flask_babel import _
-from src.models.models import db, User, Note
-from src.forms import forms
+from flask_babel import lazy_gettext as _l
+from src.models import db, User, Note
+from src.notes.forms import NoteForm
 
 
 bp = Blueprint('notes', __name__)
@@ -56,7 +57,7 @@ def index():
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
-    form = forms.Note()
+    form = NoteForm()
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
@@ -100,7 +101,7 @@ def get_note(id, check_author=True):
 @login_required
 def update(id):
     note = get_note(id)
-    form = forms.Note(obj=note)
+    form = NoteForm(obj=note)
 
     if request.method == 'POST':
         title = request.form['title']

@@ -3,15 +3,9 @@ from time import time
 import hashlib
 import jwt
 from flask import current_app
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from flask_login import UserMixin
 from flask_bcrypt import generate_password_hash, check_password_hash
-from src.helpers.login import login_manager
-
-
-db = SQLAlchemy()
-migrate = Migrate()
+from src.extensions import login_manager, db
 
 
 @login_manager.user_loader
