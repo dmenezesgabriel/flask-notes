@@ -1,9 +1,9 @@
 # Development
 build-dev:
-	docker-compose build --no-cache
+	docker-compose build --no-cache web
 
 run-dev:
-	docker-compose up
+	docker-compose up web
 
 create-db:
 	docker-compose exec web python manage.py create_db
@@ -22,6 +22,13 @@ down-dev:
 
 dev-bash:
 	docker-compose exec web /bin/sh
+
+# Test
+build-test:
+	docker-compose build --no-cache test
+
+run-test:
+	docker-compose up test
 
 # Production
 build-prod:
