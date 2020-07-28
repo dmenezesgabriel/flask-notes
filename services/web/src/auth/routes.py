@@ -5,10 +5,10 @@ from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user
 from flask_babel import _
 from flask_babel import lazy_gettext as _l
-from src.models.models import db, User
-from src.forms.forms import (
+from src.models import db, User
+from src.auth.forms import (
     Register, Login, ResetPasswordRequestForm, ResetPasswordForm)
-from src.helpers.email import send_password_reset_email
+from src.auth.email import send_password_reset_email
 
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')

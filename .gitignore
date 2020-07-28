@@ -129,5 +129,5 @@ dmypy.json
 .pyre/
 
 # Logs
-*/logs/
-!*.log.*[^0-9]*
+*.log.[0-9]*
+/logs

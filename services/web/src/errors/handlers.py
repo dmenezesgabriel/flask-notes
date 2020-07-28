@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 from flask_babel import _
-from src.models.models import db
+from src.models import db
 
 
 bp = Blueprint('errors', __name__)
