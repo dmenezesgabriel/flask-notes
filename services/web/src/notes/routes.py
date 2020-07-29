@@ -1,11 +1,11 @@
 from flask import (
-    Blueprint, flash, redirect, render_template, request, url_for, current_app
+    Blueprint, flash, redirect, render_template, request, url_for, current_app,
+    g
 )
 from werkzeug.exceptions import abort
 from sqlalchemy.exc import DataError
 from flask_login import login_required, current_user
 from flask_babel import _
-from flask_babel import lazy_gettext as _l
 from src.models import db, User, Note
 from src.notes.forms import NoteForm
 
@@ -135,3 +135,22 @@ def delete(id):
     db.session.delete(note)
     db.session.commit()
     return redirect(url_for('notes.index'))
+
+
+@bp.route('/search')
+@login_required
+def search():
+    if not g.search_form.validate():
+        return redirect(url_for('notes.index'))
+    page = request.args.get('page', 1, type=int)
+    notes_search, total = Note.search(g.search_form.q.data, page,
+                                      current_app.config['NOTES_PER_PAGE'])
+    # Filter only user notes
+    user_notes = notes_search.filter_by(author_id=current_user.id)
+    # Pagination
+    next_url = url_for('main.search', q=g.search_form.q.data, page=page + 1) \
+        if total > page * current_app.config['NOTES_PER_PAGE'] else None
+    prev_url = url_for('main.search', q=g.search_form.q.data, page=page - 1) \
+        if page > 1 else None
+    return render_template('search.html', title=_('Search'), notes=user_notes,
+                           next_url=next_url, prev_url=prev_url)
