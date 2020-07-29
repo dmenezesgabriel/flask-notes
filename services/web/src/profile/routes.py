@@ -1,22 +1,13 @@
-from datetime import datetime
 from flask import (
-    Blueprint, flash, redirect, render_template, request, url_for, g
+    Blueprint, flash, redirect, render_template, request, url_for
 )
-from flask_babel import _, get_locale
+from flask_babel import _
 from src.models import db, User
 from flask_login import login_required, current_user
 from src.profile.forms import EditProfileForm
 
 
 bp = Blueprint('user', __name__)
-
-
-@bp.before_request
-def before_request():
-    if current_user.is_authenticated:
-        current_user.last_seen = datetime.utcnow()
-        db.session.commit()
-        g.locale = str(get_locale())
 
 
 @bp.route('/profile')
