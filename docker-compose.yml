@@ -15,7 +15,7 @@ services:
     command: python manage.py run -h 0.0.0.0
     volumes:
       - ./services/web/:/usr/src/app/:z
-    restart: on-failure
+    restart: always
     ports:
       - 5000:5000
     env_file:
@@ -23,6 +23,7 @@ services:
     depends_on:
       - db
       - elasticsearch
+      - redis
 
   db:
     image: postgres:12-alpine
@@ -53,6 +54,14 @@ services:
     ports:
       - 9200:9200
 
+  redis:
+    image: redis:3.2-alpine
+    volumes:
+      - redis_data:/var/lib/redis
+    ports:
+      - 6379:6379
+
 volumes:
   postgres_data:
   elasticsearch_data:
+  redis_data:

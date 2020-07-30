@@ -6,6 +6,8 @@ from flask import Flask, request, current_app, g
 from flask_login import current_user
 from elasticsearch import Elasticsearch
 from flask_ckeditor import CKEditor
+from redis import Redis
+import rq
 from src.notes.routes import bp as notes_bp
 from src.errors.handlers import bp as error_bp
 from src.auth.routes import bp as auth_bp
@@ -47,6 +49,10 @@ def create_app(config_class=Config):
     CKEditor(app)
     # Register blueprints
     init_blueprints(app)
+
+    # Redis
+    app.redis = Redis.from_url(app.config['REDIS_URL'])
+    app.task_queue = rq.Queue('flask-notes-tasks', connection=app.redis)
 
     # Logging config
     if not app.testing:
