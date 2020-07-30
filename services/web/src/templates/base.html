@@ -18,6 +18,21 @@
   {% include '_navbar.html' %}
   <div class="container">
     <section class="content mb-3">
+      <!-- Show progress notification -->
+      {% if current_user.is_authenticated %}
+      {% with tasks = current_user.get_tasks_in_progress() %}
+      {% if tasks %}
+          {% for task in tasks %}
+          <div class="alert alert-success mt-3" role="alert">
+              {{ task.description }}
+              <span id="{{ task.id }}-progress">{{ task.get_progress() }}</span>%
+          </div>
+          {% endfor %}
+      {% endif %}
+      {% endwith %}
+      {% endif %}
+
+      <!-- Show alerts -->
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           {% for category, message in messages %}

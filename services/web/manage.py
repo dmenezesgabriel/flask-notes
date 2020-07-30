@@ -1,6 +1,8 @@
 import os
 import click
+from flask import current_app
 from flask.cli import FlaskGroup
+from rq import Connection, Worker
 from src import create_app
 from src.models import db, TimestampMixin, User, Note
 
@@ -11,7 +13,6 @@ cli = FlaskGroup(create_app=create_app)
 
 @cli.command('create_db')
 def create_db():
-    print(db)
     db.drop_all()
     db.create_all()
     db.session.commit()
@@ -26,6 +27,14 @@ def seed_db():
     db.session.add(user_a)
     db.session.add(user_b)
     db.session.commit()
+
+
+@cli.command('run_worker')
+def run_worker():
+    redis_connection = current_app.redis
+    with Connection(redis_connection):
+        worker = Worker(current_app.task_queue)
+        worker.work()
 
 
 @cli.group()
