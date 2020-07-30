@@ -5,6 +5,8 @@ import jwt
 from flask import current_app
 from flask_login import UserMixin
 from flask_bcrypt import generate_password_hash, check_password_hash
+import redis
+import rq
 from src.extensions import login_manager, db
 from search import add_to_index, remove_from_index, query_index
 
@@ -28,6 +30,7 @@ class User(UserMixin, TimestampMixin, db.Model):
     email = db.Column(db.String(50), nullable=False)
     notes = db.relationship('Note', backref='author', lazy='dynamic')
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    tasks = db.relationship('Task', backref='user', lazy='dynamic')
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -57,6 +60,43 @@ class User(UserMixin, TimestampMixin, db.Model):
         except Exception:
             return
         return User.query.get(id)
+
+    def launch_task(self, name, description, *args, **kwargs):
+        """Submit the task to RQ along with adding it to the database"""
+        rq_job = current_app.task.queue.enqueue(
+            'src.tasks.' + name, self.id, *args, **kwargs)
+        task = Task(
+            id=rq_job.get_id(), name=name, description=description, user=self)
+        db.session.add(task)
+        return task
+
+    def get_tasks_in_progress(self):
+        """Get all tasks in progress"""
+        return Task.query.filter_by(user=self, complete=False).all()
+
+    def get_task_in_progress(self, name):
+        """Get only one task in progress"""
+        return Task.query.filter_by(
+            name=name, user=self, complete=False).first()
+
+
+class Task(db.Model):
+    id = db.Column(db.String(36), primary_key=True)
+    name = db.Column(db.String(128), index=True)
+    description = db.Column(db.String(128))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    complete = db.Column(db.Boolean, default=False)
+
+    def get_rq_job(self):
+        try:
+            rq_job = rq.job.Job.fetch(self.id, connection=current_app.redis)
+        except (redis.exceptions.RedisError, rq.exceptions.NoSuchJobError):
+            return None
+        return rq_job
+
+    def get_progress(self):
+        job = self.get_rq_job()
+        return job.meta.get('progress', 0) if job is not None else 100
 
 
 class SearchableMixin(object):
