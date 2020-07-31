@@ -75,7 +75,6 @@ def create_app(config_class=Config):
     else:
         None
 
-
     @app.before_request
     def before_request():
         if current_user.is_authenticated:

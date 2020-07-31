@@ -14,13 +14,15 @@
 		<p>{{ _('Last seen on:') }} {{ moment(user.last_seen).format('LLL') }}</p>
 		<div class="p-1">
 		<a class="btn btn-secondary btn-sm" href="{{ url_for('user.edit_profile', username=current_user.username) }}" role="button">{{ _('Edit') }}</a>
+		{% if not current_user.get_task_in_progress('export_posts') %}
+		<a class="btn btn-secondary btn-sm" href="{{ url_for('user.export_notes', username=current_user.username) }}" role="button">{{ _('Export Notes') }}</a>
+		{% endif %}
 		</div>
-      </div>
+		</div>
 			<div class="card-body">
 				<p>{{ _('Username:') }} {{  user.username }}</p>
 				<p>{{ _('Email:') }} {{  user.email }}</p>
 			</div>
-
 		</div>
 
 	</div>
