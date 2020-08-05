@@ -1,12 +1,9 @@
 from flask import (
-    Blueprint, flash, redirect, render_template, request, url_for, current_app,
-    g
-)
+    Blueprint, redirect, render_template, request, url_for, current_app, g)
 from werkzeug.exceptions import abort
-from sqlalchemy.exc import DataError
 from flask_login import login_required, current_user
 from flask_babel import _
-from src.models import db, User, Note
+from src.models import db, Note
 from src.notes.forms import NoteForm
 
 
@@ -18,22 +15,9 @@ bp = Blueprint('notes', __name__)
 def index():
     page = request.args.get('page', 1, type=int)
     notes = (
-        Note.query
-        .with_entities(
-            Note.id,
-            Note.created_at,
-            Note.updated_at,
-            Note.title,
-            Note.body,
-            Note.author_id,
-            User.id.label('user_id'),
-            User.username
-        )
-        .filter_by(author_id=current_user.id)
+        current_user.notes
         .order_by(Note.created_at.desc())
-        .join(User, User.id == Note.author_id)
         .paginate(page, current_app.config['NOTES_PER_PAGE'], False)
-
     )
     # Pagination
     next_url = (
@@ -59,41 +43,23 @@ def index():
 def create():
     form = NoteForm()
     if request.method == 'POST':
-        title = request.form['title']
-        body = request.form['body']
-
-        if not form.validate_on_submit():
-            flash(_('Invalid form params'), 'danger')
-            return render_template('notes/create.html', form=form)
-
-        else:
-            try:
-                new_note = Note(
-                    title=title, body=body, author_id=current_user.id)
-                db.session.add(new_note)
-                db.session.commit()
-                return redirect(url_for('notes.index'))
-            except DataError:
-                db.session.rollback()
-                flash(_('Number of characters exceeds maximum'), 'danger')
+        if form.validate_on_submit():
+            new_note = Note(
+                title=form.title.data,
+                body=form.body.data,
+                author_id=current_user.id
+            )
+            db.session.add(new_note)
+            db.session.commit()
+            return redirect(url_for('notes.index'))
 
     return render_template('notes/create.html', title=_('New Note'), form=form)
 
 
 def get_note(id, check_author=True):
-    note = (
-        Note.query
-        .filter_by(id=id)
-        .join(User, Note.author_id == User.id)
-        .first()
-    )
-
+    note = current_user.notes.filter_by(id=id).first()
     if note is None:
         abort(404, _("Note id {} doesn't exist.".format(id)))
-
-    if check_author and note.author_id != current_user.id:
-        abort(403)
-
     return note
 
 
@@ -102,30 +68,17 @@ def get_note(id, check_author=True):
 def update(id):
     note = get_note(id)
     form = NoteForm(obj=note)
-
-    if request.method == 'POST':
-        title = request.form['title']
-        body = request.form['body']
-
-        note.title = title
-        note.body = body
-        try:
-            if not form.validate_on_submit():
-                flash(_('Invalid form params'), 'danger')
-                return render_template(
-                    'notes/update.html', note=note, form=form)
-
-            db.session.commit()
-            return redirect(url_for('notes.index'))
-        except DataError:
-            db.session.rollback()
-            flash(_('Number of characters exceeds maximum'), 'danger')
+    if form.validate_on_submit():
+        note.title = form.title.data
+        note.body = form.body.data
+        db.session.commit()
+        return redirect(url_for('notes.index'))
+    elif request.method == 'GET':
+        form.title.data = note.title
+        form.body.data = note.body
 
     return render_template(
-        'notes/update.html',
-        title=_('Edit Note'),
-        note=note, form=form
-    )
+        'notes/update.html', title=_('Edit Note'), note=note, form=form)
 
 
 @bp.route('/<int:id>/delete', methods=('POST', 'GET'))
