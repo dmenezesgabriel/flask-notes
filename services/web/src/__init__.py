@@ -3,21 +3,31 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 from flask import Flask, request, current_app, g
-from flask_login import current_user
 from elasticsearch import Elasticsearch
+from flask_login import current_user
 from flask_ckeditor import CKEditor
+# Background tasks
 from redis import Redis
 import rq
+# Blueprints
+# Views
 from src.notes.routes import bp as notes_bp
 from src.errors.handlers import bp as error_bp
 from src.auth.routes import bp as auth_bp
 from src.profile.routes import bp as profile_bp
+# Api
+from src.api.users import bp as users_api_bp
+from src.api.tokens import bp as tokens_api_bp
+# Extensions
 from src.extensions import babel, db, login_manager, mail, migrate, moment
+# Settings
 from config import Config
+# Full text search
 from src.notes.forms import SearchForm
 
 
-_blueprints = (auth_bp, notes_bp, profile_bp, error_bp)
+_blueprints = (auth_bp, notes_bp, profile_bp, error_bp, users_api_bp,
+               tokens_api_bp)
 
 
 def init_blueprints(app):
@@ -56,18 +66,23 @@ def create_app(config_class=Config):
 
     # Logging config
     if not app.testing:
-        if not os.path.exists('logs'):
-            os.mkdir('logs')
-        file_handler = RotatingFileHandler(
-            'logs/flask-notes.log', maxBytes=10240, backupCount=10)
-        file_handler.setFormatter(logging.Formatter(
-            """%(asctime)s %(levelname)s: %(message)s """
-            """[in %(pathname)s:%(lineno)d]"""))
-        file_handler.setLevel(logging.INFO)
-        app.logger.addHandler(file_handler)
+        if app.config['LOG_TO_STDOUT']:
+            stream_handler = logging.StreamHandler()
+            stream_handler.setLevel(logging.INFO)
+            app.logger.addHandler(stream_handler)
+        else:
+            if not os.path.exists('logs'):
+                os.mkdir('logs')
+            file_handler = RotatingFileHandler(
+                'logs/flask-notes.log', maxBytes=10240, backupCount=10)
+            file_handler.setFormatter(logging.Formatter(
+                """%(asctime)s %(levelname)s: %(message)s """
+                """[in %(pathname)s:%(lineno)d]"""))
+            file_handler.setLevel(logging.INFO)
+            app.logger.addHandler(file_handler)
 
-        app.logger.setLevel(logging.INFO)
-        app.logger.info('Flask Notes startup')
+            app.logger.setLevel(logging.INFO)
+            app.logger.info('Flask Notes startup')
 
     # Elasticsearch
     if app.config['ELASTICSEARCH_URL']:
