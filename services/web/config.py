@@ -19,6 +19,7 @@ class Config(object):
     STATIC_FOLDER = f"{os.getenv('APP_FOLDER')}/src/static"
     MEDIA_FOLDER = f"{os.getenv('APP_FOLDER')}/src/media"
     NOTES_PER_PAGE = 5
+    LOG_TO_STDOUT = os.getenv('LOG_TO_STDOUT')
 
     # Extensions
     # CK editor
